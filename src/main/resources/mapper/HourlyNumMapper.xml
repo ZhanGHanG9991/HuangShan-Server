@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hfut.huangshan.mapper.HourlyNumMapper">
+
+    <!--开启二级缓存-->
+    <cache eviction="FIFO"
+           flushInterval="60000"
+           size="512"
+           readOnly="true"/>
+
+    <!--映射-->
+    <resultMap id="hourlyNumMap" type="hourlyNum">
+        <result column="date_name" property="dateName"/>
+        <result column="hour" property="hour"/>
+        <result column="hour_num" property="hourNum"/>
+    </resultMap>
+
+    <!--限制性全查询：降序前2000条-->
+    <select id="getLimitAllHourlyNum" resultMap="hourlyNumMap">
+        SELECT * FROM hourlynum ORDER BY hourlynum.date_name DESC,hourlynum.`hour` ASC LIMIT 2000
+    </select>
+
+    <!--按开始日期和结束日期来查询-->
+    <select id="periodHourlyNum" parameterType="String" resultMap="hourlyNumMap">
+        select * from hourlynum where date_name <![CDATA[ >= ]]> #{startTime} and date_name <![CDATA[ <= ]]> #{endTime}
+    </select>
+
+    <!--根据日期查询某一天的-->
+    <select id="getOneDayNum" parameterType="String" resultMap="hourlyNumMap">
+        select * from  huangshan.hourlynum where date_name = #{date}
+    </select>
+
+    <!--按日期+时间查询-->
+    <select id="getOneByDateHour" parameterType="String" resultMap="hourlyNumMap">
+        select * from huangshan.hourlynum where date_name = #{date} and hour = #{hour}
+    </select>
+
+    <!--增加一个-->
+    <insert id="addOne" parameterType="hourlyNum">
+        insert into huangshan.hourlynum(date_name, hour, hour_num)
+        values (#{dateName},#{hour},#{hourNum})
+    </insert>
+
+    <!--批量增加-->
+    <insert id="addMany" parameterType="java.util.List">
+        insert into huangshan.hourlynum(date_name, hour, hour_num)
+        values
+        <foreach collection="hourlyNums" item="hourlyNum" index="index" separator=",">
+            (
+                #{hourlyNum.dateName},
+                #{hourlyNum.hour},
+                #{hourlyNum.hourNum}
+            )
+        </foreach>
+    </insert>
+
+    <!--更新一个-->
+    <update id="updateOne" parameterType="hourlyNum">
+        update huangshan.hourlynum
+        set hour_num = #{hourNum}
+        where date_name = #{dateName} and hour = #{hour}
+    </update>
+
+    <!--删除一个-->
+    <delete id="deleteOne" parameterType="String">
+        delete from huangshan.hourlynum
+        where date_name = #{date} and hour = #{hour}
+    </delete>
+
+    <!--删除一天中的全部-->
+    <delete id="deleteOneDayAll" parameterType="String">
+        delete from huangshan.hourlynum
+        where date_name = #{date}
+    </delete>
+</mapper>

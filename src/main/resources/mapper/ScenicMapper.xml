@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hfut.huangshan.mapper.ScenicMapper">
+
+    <!--开启二级缓存-->
+    <cache eviction="FIFO"
+           flushInterval="60000"
+           size="512"
+           readOnly="true"/>
+
+    <!--映射-->
+    <resultMap id="scenicMap" type="scenic">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="open_time" property="openTime"/>
+        <result column="ticket_price" property="ticketPrice"/>
+        <result column="is_close" property="isClose"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="head_icon" property="headIcon"/>
+        <result column="photo_url" property="photoUrl"/>
+        <result column="video_url" property="videoUrl"/>
+        <result column="audio_url" property="audioUrl"/>
+    </resultMap>
+
+    <!--全查询-->
+    <select id="getAllScenes" resultMap="scenicMap">
+        select * from huangshan.scenic
+    </select>
+
+    <!--id查询-->
+    <select id="getById" parameterType="long" resultMap="scenicMap">
+        select * from huangshan.scenic where id = #{id}
+    </select>
+
+    <!--删除一个-->
+    <delete id="deleteOne" parameterType="long">
+        delete from huangshan.scenic
+        where id = #{id}
+    </delete>
+
+    <!--增加一个-->
+    <insert id="addOne" parameterType="scenic">
+        insert into huangshan.scenic(id,code,name,description,open_time,ticket_price,is_close,longitude,latitude,head_icon,photo_url,video_url,audio_url)
+        values (#{id},#{code},#{name},#{description},#{openTime},#{ticketPrice},#{isClose},#{longitude},#{latitude},#{headIcon},#{photoUrl},#{videoUrl},#{audioUrl})
+    </insert>
+
+    <!--更新一个-->
+    <update id="updateOne" parameterType="scenic">
+        update huangshan.scenic
+        set
+        code = #{code},
+        name = #{name},
+        description = #{description},
+        open_time = #{openTime},
+        ticket_price = #{ticketPrice},
+        is_close = #{isClose},
+        longitude = #{longitude},
+        latitude = #{latitude},
+        head_icon = #{headIcon},
+        photo_url = #{photoUrl},
+        video_url = #{videoUrl},
+        audio_url = #{audioUrl}
+        where id = #{id}
+    </update>
+
+</mapper>

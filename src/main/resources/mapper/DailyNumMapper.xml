@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hfut.huangshan.mapper.DailyNumMapper">
+
+    <!--开启二级缓存-->
+    <cache eviction="FIFO"
+           flushInterval="60000"
+           size="512"
+           readOnly="true"/>
+
+    <!--映射-->
+    <resultMap id="dailyNumMap" type="dailyNum">
+        <result column="date_name" property="dateName"/>
+        <result column="date_week" property="dateWeek"/>
+        <result column="predict_num" property="predictNum"/>
+        <result column="today_eight_num" property="todayEightNum"/>
+        <result column="today_nine_num" property="todayNineNum"/>
+        <result column="today_total_num" property="todayTotalNum"/>
+        <result column="deviation_rate" property="deviationRate"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="weather_name" property="weatherName"/>
+        <result column="module_name" property="moduleName"/>
+        <result column="description" property="description"/>
+        <result column="is_holiday" property="isHoliday"/>
+        <result column="holiday_name" property="holidayName"/>
+        <result column="holiday_order" property="holidayOrder"/>
+    </resultMap>
+
+    <!--限制性全查询：降序前1000条-->
+    <select id="getLimitAllDailyNum" resultMap="dailyNumMap">
+        SELECT * FROM dailynum ORDER BY dailynum.date_name DESC LIMIT 1000
+    </select>
+
+    <!--按开始日期和结束日期查询  <![CDATA[ >= ]]> 是因为 > < 等直接写会认为是标签的 这里要么这么写 要么使用转义字符-->
+    <select id="periodDailyNum" parameterType="String" resultMap="dailyNumMap">
+        select * from dailynum where date_name <![CDATA[ >= ]]> #{startTime} and date_name <![CDATA[ <= ]]> #{endTime}
+    </select>
+
+    <!--根据日期查询某一天的-->
+    <select id="getOneByDate" parameterType="String" resultMap="dailyNumMap">
+        select * from huangshan.dailynum where date_name = #{date};
+    </select>
+
+    <!--查询同一假期相对同一天-->
+    <select id="getHolidayDailyNum" parameterType="cn.hfut.huangshan.pojo.DailyNum" resultMap="dailyNumMap">
+        select *
+        from huangshan.dailynum
+        where holiday_name = #{holidayName} and holiday_order = #{holidayOrder}
+    </select>
+
+    <!--插入一个-->
+    <insert id="addOneDayNum" parameterType="dailyNum">
+        insert into huangshan.dailynum(date_name, date_week, predict_num, today_eight_num, today_nine_num, today_total_num, deviation_rate, weather_name, order_num, module_name, description, is_holiday, holiday_name, holiday_order)
+        values (#{dateName},#{dateWeek},#{predictNum},#{todayEightNum},#{todayNineNum},#{todayTotalNum},#{deviationRate},#{weatherName},#{orderNum},#{moduleName},#{description},#{isHoliday},#{holidayName},#{holidayOrder})
+    </insert>
+
+    <!--更新一个-->
+    <update id="updateOne" parameterType="dailyNum">
+        update huangshan.dailynum
+        set
+        date_week = #{dateWeek},
+        predict_num = #{predictNum},
+        today_eight_num = #{todayEightNum},
+        today_nine_num = #{todayNineNum},
+        today_total_num = #{todayTotalNum},
+        deviation_rate = #{deviationRate},
+        order_num = #{orderNum},
+        weather_name = #{weatherName},
+        module_name = #{moduleName},
+        description = #{description},
+        is_holiday = #{isHoliday},
+        holiday_name = #{holidayName},
+        holiday_order = #{holidayOrder}
+        where date_name = #{dateName}
+    </update>
+
+    <!--删除一个-->
+    <delete id="deleteOne" parameterType="String">
+        delete from huangshan.dailynum where date_name = #{date}
+    </delete>
+</mapper>
