@@ -25,10 +25,11 @@ public class DateFormatUtil {
 
     /**
      * 转化成日期的格式： yyyy-MM-dd
-     * @param date
+     * @param date 2019-11-01
      * @return
      */
     public static String toDate(String date){
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date formatDate = null;
         try {

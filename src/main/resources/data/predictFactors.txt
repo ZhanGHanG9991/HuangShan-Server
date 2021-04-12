@@ -1,0 +1,1 @@
+Factors(label=14452.284791666667, order=5647.0, pre1Num=6638.0, pre2Num=8427.0, pre3Num=10053.0, pre7Num=7474.0, weather=0, holidayType=1, weekType=0, classifier=6, weekday=3)Factors(label=29660.540295815295, order=6636.0, pre1Num=12354.0, pre2Num=6638.0, pre3Num=8427.0, pre7Num=8238.0, weather=0, holidayType=1, weekType=0, classifier=6, weekday=4)

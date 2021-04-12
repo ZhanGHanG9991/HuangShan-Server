@@ -31,6 +31,11 @@
         <result column="pre7_total_num" property="pre7TotalNum"/>
     </resultMap>
 
+    <!--全查询：降序-->
+    <select id="getAllDailyStatistics" resultMap="dailyStatisticsMap">
+        SELECT * FROM dailystatistics ORDER BY dailystatistics.date_name DESC
+    </select>
+
     <!--限制性全查询：降序前1000条-->
     <select id="getLimitAllDailyStatistics" resultMap="dailyStatisticsMap">
         SELECT * FROM dailystatistics ORDER BY dailystatistics.date_name DESC LIMIT 1000
@@ -45,4 +50,39 @@
     <select id="getOneStatisticsByDate" parameterType="String" resultMap="dailyStatisticsMap">
         select * from dailystatistics where date_name = #{date};
     </select>
+
+    <!--插入一个-->
+    <insert id="addOneDailyStatistics" parameterType="dailyStatistics">
+        insert into dailystatistics(date_name, date_week, predict_num, today_eight_num, today_nine_num, today_total_num, deviation_rate, weather_name, order_num, module_name, description, is_holiday, holiday_name, holiday_order, pre1_total_num, pre2_total_num, pre3_total_num, pre7_total_num)
+        values (#{dateName},#{dateWeek},#{predictNum},#{todayEightNum},#{todayNineNum},#{todayTotalNum},#{deviationRate},#{weatherName},#{orderNum},#{moduleName},#{description},#{isHoliday},#{holidayName},#{holidayOrder}, #{pre1TotalNum}, #{pre2TotalNum}, #{pre3TotalNum}, #{pre7TotalNum})
+    </insert>
+
+    <!--更新一个-->
+    <update id="updateOne" parameterType="dailyStatistics">
+        update dailystatistics
+        set
+        date_week = #{dateWeek},
+        predict_num = #{predictNum},
+        today_eight_num = #{todayEightNum},
+        today_nine_num = #{todayNineNum},
+        today_total_num = #{todayTotalNum},
+        deviation_rate = #{deviationRate},
+        order_num = #{orderNum},
+        weather_name = #{weatherName},
+        module_name = #{moduleName},
+        description = #{description},
+        is_holiday = #{isHoliday},
+        holiday_name = #{holidayName},
+        holiday_order = #{holidayOrder},
+        pre1_total_num = #{pre1TotalNum},
+        pre2_total_num = #{pre2TotalNum},
+        pre3_total_num = #{pre3TotalNum},
+        pre7_total_num = #{pre7TotalNum}
+        where date_name = #{dateName}
+    </update>
+
+    <!--删除一个-->
+    <delete id="deleteOne" parameterType="String">
+        delete from dailystatistics where date_name = #{date}
+    </delete>
 </mapper>

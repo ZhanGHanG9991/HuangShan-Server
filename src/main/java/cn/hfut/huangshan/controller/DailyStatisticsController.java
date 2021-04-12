@@ -7,10 +7,7 @@ import cn.hfut.huangshan.response.ResultObj;
 import cn.hfut.huangshan.service.DailyStatisticsService;
 import cn.hfut.huangshan.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,21 @@ public class DailyStatisticsController {
 
     @Autowired
     DailyStatisticsService dailyStatisticsService;
+
+    /**
+     * 全查询：降序
+     *
+     * @return
+     */
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResultObj getAllDailyStatistics() {
+        List<DailyStatistics> dailyStatistics = dailyStatisticsService.getAllDailyStatistics();
+        if (dailyStatistics.size() > 0) {
+            return ResponseUtil.success(dailyStatistics);
+        } else {
+            return ResponseUtil.error(ErrorCode.QUERY_FAIL, ErrorCode.QUERY_FAIL_MSG, null);
+        }
+    }
 
     /**
      * 限制性全查询：降序前1000条
@@ -70,6 +82,54 @@ public class DailyStatisticsController {
             return ResponseUtil.success(dailyStatistics);
         } else {
             return ResponseUtil.error(ErrorCode.QUERY_FAIL, ErrorCode.QUERY_FAIL_MSG, null);
+        }
+    }
+
+    /**
+     * 插入一条记录
+     * @param dailyStatistics
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    public ResultObj addOneDailyStatistics(@RequestBody DailyStatistics dailyStatistics){
+        boolean isSuccess = dailyStatisticsService.addOneDailyStatistics(dailyStatistics);
+        if (isSuccess){
+            DailyStatistics insertedData = dailyStatisticsService.getOneStatisticsByDate(dailyStatistics.getDateName());
+            return ResponseUtil.success(insertedData);
+        }else {
+            return ResponseUtil.error(ErrorCode.ADD_FAIL,ErrorCode.ADD_FAIL_MSG, null);
+        }
+    }
+
+    /**
+     * 更新一个
+     * @param date
+     * @param dailyStatistics
+     * @return
+     */
+    @RequestMapping(value = "/{date}", method = RequestMethod.PUT)
+    public ResultObj updateOne(@PathVariable("date") String date, @RequestBody DailyStatistics dailyStatistics){
+        boolean isSuccess = dailyStatisticsService.updateOne(dailyStatistics);
+        if (isSuccess){
+            DailyStatistics insertedData = dailyStatisticsService.getOneStatisticsByDate(date);
+            return ResponseUtil.success(insertedData);
+        }else {
+            return ResponseUtil.error(ErrorCode.UPDATE_FAIL,ErrorCode.UPDATE_FAIL_MSG, null);
+        }
+    }
+
+    /**
+     * 删除一个
+     * @param date
+     * @return
+     */
+    @RequestMapping(value = "/{date}", method = RequestMethod.DELETE)
+    public ResultObj deleteOne(@PathVariable("date") String date){
+        boolean isSuccess = dailyStatisticsService.deleteOne(date);
+        if (isSuccess){
+            return ResponseUtil.success(null);
+        }else {
+            return ResponseUtil.error(ErrorCode.DELETE_FAIL,ErrorCode.DELETE_FAIL_MSG, null);
         }
     }
 
