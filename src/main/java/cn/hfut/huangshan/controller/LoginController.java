@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * 登录
- * @author PCY
+ * @author zh
  */
 @RestController
 public class LoginController {

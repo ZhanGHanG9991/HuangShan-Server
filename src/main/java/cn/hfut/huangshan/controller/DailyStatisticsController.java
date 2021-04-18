@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * @author Administrator
+ * @author zh
  */
 @RestController
 @RequestMapping("daily_statistics")

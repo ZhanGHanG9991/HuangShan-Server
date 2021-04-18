@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * 景点
- * @author pcy
+ * @author zh
  */
 @RestController
 @RequestMapping("scenics")

@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * 小时数据
- * @author pcy
+ * @author zh
  */
 @RestController
 @RequestMapping("hourly_nums")

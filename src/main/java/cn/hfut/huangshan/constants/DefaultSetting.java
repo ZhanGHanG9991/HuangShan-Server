@@ -2,7 +2,7 @@ package cn.hfut.huangshan.constants;
 
 /**
  * 默认的设置
- * @author pcy
+ * @author zh
  */
 public class DefaultSetting {
 

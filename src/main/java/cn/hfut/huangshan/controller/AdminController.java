@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * 管理员接口
- * @author pcy
+ * @author zh
  */
 @RestController
 @RequestMapping("admins")

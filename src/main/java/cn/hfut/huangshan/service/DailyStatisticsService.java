@@ -3,6 +3,7 @@ package cn.hfut.huangshan.service;
 import cn.hfut.huangshan.mapper.DailyStatisticsMapper;
 import cn.hfut.huangshan.pojo.DailyNum;
 import cn.hfut.huangshan.pojo.DailyStatistics;
+import cn.hfut.huangshan.service.predict.RandomForestPmmlPredictService;
 import cn.hfut.huangshan.service.predict.RandomForestPredictService;
 import cn.hfut.huangshan.utils.DateCalculateUtil;
 import cn.hfut.huangshan.utils.DateFormatUtil;
@@ -26,7 +27,7 @@ public class DailyStatisticsService {
     DailyStatisticsMapper dailyStatisticsMapper;
 
     @Autowired
-    RandomForestPredictService randomForestPredictService;
+    RandomForestPmmlPredictService randomForestPmmlPredictService;
 
     /**
      * 全查询：降序
@@ -95,20 +96,10 @@ public class DailyStatisticsService {
      * @return
      */
     @Transactional
-    public Boolean addOneDailyStatistics(DailyStatistics dailyStatistics) {
-
-        List<DailyStatistics> beforePredict = new ArrayList<DailyStatistics>() {{
-            add(dailyStatistics);
-        }};
+    public Boolean addOneDailyStatistics(DailyStatistics dailyStatistics){
 
         String date = DateFormatUtil.toDate(dailyStatistics.getDateName());
         dailyStatistics.setDateName(date);
-
-        DailyStatistics dailyStatisticsPredict = randomForestPredictService.predictor(beforePredict).get(0);
-
-        // 计算偏差
-        double rate = (double) (dailyStatisticsPredict.getTodayTotalNum() - dailyStatisticsPredict.getPredictNum()) / dailyStatisticsPredict.getTodayTotalNum();
-        dailyStatisticsPredict.setDeviationRate(rate);
 
         String pre1Date = DateCalculateUtil.getDistanceDay(date, -1);
         String pre2Date = DateCalculateUtil.getDistanceDay(date, -2);
@@ -119,31 +110,37 @@ public class DailyStatisticsService {
 
         for (DailyStatistics element : dailyStatisticsList) {
             if (element.getDateName().equals(pre1Date)) {
-                dailyStatisticsPredict.setPre1TotalNum(element.getTodayTotalNum());
+                dailyStatistics.setPre1TotalNum(element.getTodayTotalNum());
                 break;
             }
         }
 
         for (DailyStatistics item : dailyStatisticsList) {
             if (item.getDateName().equals(pre2Date)) {
-                dailyStatisticsPredict.setPre2TotalNum(item.getTodayTotalNum());
+                dailyStatistics.setPre2TotalNum(item.getTodayTotalNum());
                 break;
             }
         }
 
         for (DailyStatistics value : dailyStatisticsList) {
             if (value.getDateName().equals(pre3Date)) {
-                dailyStatisticsPredict.setPre3TotalNum(value.getTodayTotalNum());
+                dailyStatistics.setPre3TotalNum(value.getTodayTotalNum());
                 break;
             }
         }
 
         for (DailyStatistics statistics : dailyStatisticsList) {
             if (statistics.getDateName().equals(pre7Date)) {
-                dailyStatisticsPredict.setPre7TotalNum(statistics.getTodayTotalNum());
+                dailyStatistics.setPre7TotalNum(statistics.getTodayTotalNum());
                 break;
             }
         }
+
+        DailyStatistics dailyStatisticsPredict = randomForestPmmlPredictService.predict(dailyStatistics);
+
+        // 计算偏差
+        double rate = (double) (dailyStatisticsPredict.getPredictNum() - dailyStatisticsPredict.getTodayTotalNum()) / dailyStatisticsPredict.getTodayTotalNum();
+        dailyStatisticsPredict.setDeviationRate(rate);
 
         Integer rows = dailyStatisticsMapper.addOneDailyStatistics(dailyStatisticsPredict);
         return rows > 0;

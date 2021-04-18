@@ -2,22 +2,17 @@ package cn.hfut.huangshan.service.predict;
 
 import cn.hfut.huangshan.mapper.DailyStatisticsMapper;
 import cn.hfut.huangshan.pojo.DailyStatistics;
-import cn.hfut.huangshan.predict.inpput.Factors;
 import cn.hfut.huangshan.utils.DailyStatisticsPredictUtil;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
 import org.apache.spark.mllib.tree.RandomForest;
 import org.apache.spark.mllib.tree.model.RandomForestModel;
-import org.apache.spark.mllib.util.MLUtils;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.Tuple2;
@@ -53,7 +48,7 @@ public class RandomForestPredictService {
     /**
      * 树的数量，越多结果越准确，但是消耗性能
      */
-    private static int numTrees = 500;
+    private static int numTrees = 1000;
     /**
      * 每个节点上要考虑拆分的要素数量
      */
@@ -69,7 +64,7 @@ public class RandomForestPredictService {
     /**
      * 用于拆分要素的最大数
      */
-    private static int maxBins = 100;
+    private static int maxBins = 50;
     /**
      * 随机种子
      */

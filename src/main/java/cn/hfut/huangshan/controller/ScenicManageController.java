@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * 管理员管理景点接口
- * @author pcy
+ * @author zh
  */
 @RestController
 @RequestMapping("scenic_manages")

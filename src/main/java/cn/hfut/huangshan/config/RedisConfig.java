@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * 配置redis
- * @author pcy
+ * @author zh
  */
 @Configuration
 public class RedisConfig {

@@ -2,7 +2,7 @@ package cn.hfut.huangshan.constants;
 
 /**
  * 用于后端接口返回 返回码 和 返回消息 给前端
- * @author pcy
+ * @author zh
  */
 public class ErrorCode {
 

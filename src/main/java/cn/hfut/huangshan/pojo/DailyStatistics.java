@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * 一天数据
- * @author pcy
+ * @author zh
  */
 @Data
 @AllArgsConstructor

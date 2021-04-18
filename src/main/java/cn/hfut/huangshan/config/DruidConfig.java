@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * 用于配置druid数据源
- * @author PCY
+ * @author zh
  */
 @Configuration
 public class DruidConfig {

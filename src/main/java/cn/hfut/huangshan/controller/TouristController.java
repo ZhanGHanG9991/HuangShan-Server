@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * 游客接口
- * @author pcy
+ * @author zh
  */
 @RestController
 @RequestMapping("tourists")

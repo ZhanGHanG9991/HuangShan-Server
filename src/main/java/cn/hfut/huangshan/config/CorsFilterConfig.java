@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * 负责跨域请求的过滤器
- * @author pcy
+ * @author zh
  */
 @Component
 public class CorsFilterConfig implements Filter {

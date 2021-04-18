@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * 日客流 接口
- * @author pcy
+ * @author zh
  */
 @RestController
 @RequestMapping("daily_nums")

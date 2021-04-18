@@ -19,7 +19,7 @@ import java.util.Date;
 
 /**
  * 拦截器
- * @author pcy
+ * @author zh
  */
 @Component
 public class MyInterceptor implements HandlerInterceptor {

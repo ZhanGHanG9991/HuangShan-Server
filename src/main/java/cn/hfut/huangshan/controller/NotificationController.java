@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * 通知
- * @author pcy
+ * @author zh
  */
 @RestController
 @RequestMapping("notifications")
